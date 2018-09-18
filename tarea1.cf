@@ -1,0 +1,47 @@
+EAdd. Exp ::= Exp "+" Exp1;
+EAssign. Exp ::= Exp1;
+EMult. Exp1 ::= Exp1 "*" Exp2;
+EExp. Exp1 ::= Exp2;
+ENum. Exp2 ::= Integer; --String, 
+
+
+
+Dfun. Def ::= Type Ident "(" [Args] ")" "{";
+PProg. Program ::= [Def];
+separator nonempty Def "";
+
+TInt. Type ::= "void";
+TChar. Type ::= "char";
+TString. Type ::= "string";
+
+separator Arg ",";
+ADecl.      Arg ::= Type Ident;
+SDecl.      Stm ::= Type Ident "=" Exp ";";
+SWhile.     Stm ::= "while" "(" Exp ")" "{" Stm "}";
+SFor.       Stm ::= "for" "(" Exp ")" "{" Stm "}";
+SMay.       Stm ::= Num "<" Num;
+SMen.       Stm ::= Num ">" Num;
+SMayIgual.  Stm ::= Num "<=" Num;
+SMenIgual.  Stm ::= Num ">=" Num;
+SIgual.     Stm ::= Num "==" Num;
+
+SBloc.      Stm ::= [Stm] ;                   --??
+SBloc.      Stm ::= "{" [Stm] "}";
+SIfStm.     Stm ::= "if" "(" Exp ")" Stm;
+SIfStm.     Stm ::= "if" "(" Exp ")" Stm;              --seria solo una unica sentencia, no quiero una stm
+
+SIfElse.    Stm ::= "if" "(" Exp ")" Stm "else" Stm; 
+
+
+SAsign.     Stm ::= Type var "=" " ";
+                    --char letra = "d";
+
+separator Stm "";
+ 
+DeclaracionConstante. DeclConst ::= Ident  "=" Lit;
+SConst. Ident ::= "const" [ DeclConst ];  --identificador 
+terminator DeclConst ";";
+ 
+
+DeclaracionType. Type ::= Type "=" Type ";";
+--SType. Type ::= "type" [ ];
