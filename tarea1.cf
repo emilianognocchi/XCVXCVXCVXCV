@@ -2,10 +2,11 @@ EAdd. Exp ::= Exp "+" Exp1;
 EAssign. Exp ::= Exp1;
 EMult. Exp1 ::= Exp1 "*" Exp2;
 EExp. Exp1 ::= Exp2;
+
 ENum. Exp2 ::= Integer; --String, 
+EString. Exp3 ::= String; --String, 
 
-
-
+EArgs. Args ::= String; --ver que serian los args!!! 
 Dfun. Def ::= Type Ident "(" [Args] ")" "{";
 PProg. Program ::= [Def];
 separator nonempty Def "";
@@ -32,9 +33,9 @@ SIfStm.     Stm ::= "if" "(" Exp ")" Stm;              --seria solo una unica se
 
 SIfElse.    Stm ::= "if" "(" Exp ")" Stm "else" Stm; 
 
-
-SAsign.     Stm ::= Type var "=" " ";
-                    --char letra = "d";
+--============ ASIGNACIONES ================> x := x + 1.
+SAsign.     Stm ::= Type var "=" " "; 
+SAsignVacio.     Stm ::= Type var "=" ""; 
 
 separator Stm "";
  
@@ -42,6 +43,54 @@ DeclaracionConstante. DeclConst ::= Ident  "=" Lit;
 SConst. Ident ::= "const" [ DeclConst ];  --identificador 
 terminator DeclConst ";";
  
-
 DeclaracionType. Type ::= Type "=" Type ";";
 --SType. Type ::= "type" [ ];
+
+--============ INSTRUCTIONS =================> program ...; ... begin ... <instruccion>; <instruccion>; <instruccion> ... end.
+SBegin. Stm ::= "begin " [Instruction] "end.";
+SIntrucction. Instruction ::= [Type];
+
+--============ TYPE ENUM =====================> (lunes, martes, miercoles, jueves, viernes)
+SIdentEnum. IdentEnum::= String "," ;
+SFinalIdentEnum. IdentEnum::= String ")";
+SEnum. Type ::= "(" [Ident];
+
+--============ TYPE SUBRANGOS ================> 1..100 o lunes..miercoles
+SSubrangInt. Type ::= Integer ".." Integer ";";
+SSubrangString. Type ::= String ".." String ";";
+
+
+--============ PUNTEROS  ================> ^nodolista
+SPuntero. Type ::= "^" Ident; --???????
+
+--============ ARREGLOS  ================> array[1..50] of integer
+SArrayReal. Stm 	::= "array[" Integer ".." Integer "] of real;"; --???????
+SArrayString. Stm 	::= "array[" Integer ".." Integer "] of String;"; --???????
+SArrayInteger. Stm 	::= "array[" Integer ".." Integer "] of Integer;"; --???????
+SArrayBoolean. Stm 	::= "array[" Integer ".." Integer "] of Boolean;"; --???????
+
+
+
+--============ REGISTROS  ================> 
+--record
+--x, y, z : real;
+--i : integer;
+--order : (lt, gt, eq)
+--end
+
+SVariableDeRegistroInteger. Reg ::= [Stm] ":" Exp2;   --puse STM pero esta mal. solo para q compile
+SVariableDeRegistroString. Reg ::= [Stm] ":" Exp3;  
+SRegistro. Registro ::= "record" [Reg] "end;";
+terminator Reg ";";
+
+--============ IDENTIFICADORES  ================> boolean, char, integer, real
+SIdentBoolean. Type ::= String;
+SIdentChar. Type ::= Char;
+SIdentInteger. Type ::= Integer;
+SReal. Type ::= Real;
+
+
+--============ FUNCTIONS  ================> function suma (a, b : integer; var z : real) : integer;
+
+SFunction. Function ::= "function" String "(" [Stm] ")" ":" Type;
+
