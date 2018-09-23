@@ -6,10 +6,12 @@ EExp. Exp1 ::= Exp2;
 ENum. Exp2 ::= Integer; --String, 
 EString. Exp3 ::= String; --String, 
 
-EArgs. Args ::= String; --ver que serian los args!!! 
-Dfun. Def ::= Type Ident "(" [Args] ")" "{";
+EArgs. Argss ::= String;
+DArgs. Args ::= "(" [Args] ")" "{";
+Dfun. Def ::= Type Ident [Args] ;
 PProg. Program ::= [Def];
 separator nonempty Def "";
+separator nonempty Args ";";
 
 TInt. Type ::= "void";
 TChar. Type ::= "char";
@@ -20,23 +22,21 @@ ADecl.      Arg ::= Type Ident;
 SDecl.      Stm ::= Type Ident "=" Exp ";";
 SWhile.     Stm ::= "while" "(" Exp ")" "{" Stm "}";
 SFor.       Stm ::= "for" "(" Exp ")" "{" Stm "}";
-SMay.       Stm ::= Num "<" Num;
-SMen.       Stm ::= Num ">" Num;
-SMayIgual.  Stm ::= Num "<=" Num;
-SMenIgual.  Stm ::= Num ">=" Num;
-SIgual.     Stm ::= Num "==" Num;
+SMay.       Stm ::= Exp2 "<" Exp2;
+SMen.       Stm ::= Exp2 ">" Exp2;
+SMayIgual.  Stm ::= Exp2 "<=" Exp2;
+SMenIgual.  Stm ::= Exp2 ">=" Exp2;
+SIgual.     Stm ::= Exp2 "==" Exp2;
 
 SBloc.      Stm ::= [Stm] ;                   --??
 SBloc.      Stm ::= "{" [Stm] "}";
 SIfStm.     Stm ::= "if" "(" Exp ")" Stm;
 SIfStm.     Stm ::= "if" "(" Exp ")" Stm;              --seria solo una unica sentencia, no quiero una stm
-
 SIfElse.    Stm ::= "if" "(" Exp ")" Stm "else" Stm; 
 
 --============ ASIGNACIONES ================> x := x + 1.
-SAsign.     Stm ::= Type var "=" " "; 
-SAsignVacio.     Stm ::= Type var "=" ""; 
-
+SAsignacion.     Stm ::= Type Exp3 "=" " "; 
+SAsignVacio.     Stm ::= Type Exp3 "=" ""; 
 separator Stm "";
  
 DeclaracionConstante. DeclConst ::= Ident  "=" Lit;
@@ -48,12 +48,21 @@ DeclaracionType. Type ::= Type "=" Type ";";
 
 --============ INSTRUCTIONS =================> program ...; ... begin ... <instruccion>; <instruccion>; <instruccion> ... end.
 SBegin. Stm ::= "begin " [Instruction] "end.";
+separator nonempty Stm ";";
 SIntrucction. Instruction ::= [Type];
+separator nonempty  Instruction ";";
+
+TInt. Type ::= "void";
+TChar. Type ::= "char";
+TString. Type ::= "string";
+
 
 --============ TYPE ENUM =====================> (lunes, martes, miercoles, jueves, viernes)
 SIdentEnum. IdentEnum::= String "," ;
 SFinalIdentEnum. IdentEnum::= String ")";
 SEnum. Type ::= "(" [Ident];
+separator nonempty  Type ";";
+
 
 --============ TYPE SUBRANGOS ================> 1..100 o lunes..miercoles
 SSubrangInt. Type ::= Integer ".." Integer ";";
@@ -62,6 +71,7 @@ SSubrangString. Type ::= String ".." String ";";
 
 --============ PUNTEROS  ================> ^nodolista
 SPuntero. Type ::= "^" Ident; --???????
+
 
 --============ ARREGLOS  ================> array[1..50] of integer
 SArrayReal. Stm 	::= "array[" Integer ".." Integer "] of real;"; --???????
@@ -87,7 +97,7 @@ terminator Reg ";";
 SIdentBoolean. Type ::= String;
 SIdentChar. Type ::= Char;
 SIdentInteger. Type ::= Integer;
-SReal. Type ::= Real;
+--SReal. Type ::= Real;
 
 
 --============ FUNCTIONS  ================> function suma (a, b : integer; var z : real) : integer;
