@@ -1,38 +1,76 @@
-EAdd. Exp ::= Exp "+" Exp1;
-EAssign. Exp ::= Exp1;
-EMult. Exp1 ::= Exp1 "*" Exp2;
-EExp. Exp1 ::= Exp2;
 
-ENum. Exp2 ::= Integer; --String, 
-EString. Exp3 ::= String; --String, 
+
+DefVacias. ListaDefiniciones ::=;
+ConsDef. ListaDefiniciones ::= Def ListaDefiniciones;
+
 
 EArgs. Argss ::= String;
-DArgs. Args ::= "(" [Args] ")" "{";
+DArgs. Args ::= "(" [Args] ")" "{" [Stm] "}";
+separator Args ","; 
+
+
 Dfun. Def ::= Type Ident [Args] ;
+terminator Def ";";
+terminator Def "";
+
 PProg. Program ::= [Def];
+
+
 separator nonempty Def "";
 separator nonempty Args ";";
 
-TInt. Type ::= "void";
-TChar. Type ::= "char";
-TString. Type ::= "string";
-
 separator Arg ",";
-ADecl.      Arg ::= Type Ident;
-SDecl.      Stm ::= Type Ident "=" Exp ";";
-SWhile.     Stm ::= "while" "(" Exp ")" "{" Stm "}";
-SFor.       Stm ::= "for" "(" Exp ")" "{" Stm "}";
+-- int x
+SDeclaracion.  Stm ::= Type Ident; 
+-- int i,j,k;
+SListaDeclaraciones ::= Type Ident "," [Ident] ";"; 
+-- int x = 3;
+SFullDeclaracion. Stm ::= Type Ident "=" Exp ";"; 
+
+
+SExp.		Stm ::= Exp ";"
+
 SMay.       Stm ::= Exp2 "<" Exp2;
 SMen.       Stm ::= Exp2 ">" Exp2;
 SMayIgual.  Stm ::= Exp2 "<=" Exp2;
 SMenIgual.  Stm ::= Exp2 ">=" Exp2;
 SIgual.     Stm ::= Exp2 "==" Exp2;
 
+--============ BLOQUES DE PROGRAMACION ================>
 SBloc.      Stm ::= [Stm] ;                   --??
 SBloc.      Stm ::= "{" [Stm] "}";
 SIfStm.     Stm ::= "if" "(" Exp ")" Stm;
-SIfStm.     Stm ::= "if" "(" Exp ")" Stm;              --seria solo una unica sentencia, no quiero una stm
+SIfStm.     Stm ::= "if" "(" Exp ")" Stm;         
 SIfElse.    Stm ::= "if" "(" Exp ")" Stm "else" Stm; 
+SWhile.     Stm ::= "while" "(" Exp ")" Stm;
+SFor.       Stm ::= "for" "(" Exp ")" Stm;
+SReturn.	Stm ::= "return" Exp";";
+
+--============ EXPRESIONES ================>
+EInt. Exp15 ::= Integer;
+EDouble. Exp15 ::= Double;
+EString. Exp15 ::= String;
+EString. Exp15 ::= "true";
+EString. Exp15 ::= "false";
+EString. Exp15 ::= Id; 
+
+EIncrementoMasDerecha. Exp14 ::= "++";
+EIncrementoMenosDerecha. Exp14 ::= --";
+
+EIncrementoMasIzquierda. Exp13 ::= "++" Exp14;
+EIncrementoMenosIzquierda. Exp13 ::= "--" Exp15;
+ENegacion. Exp13 ::= "-" Exp13;
+
+
+EAdd. Exp0 ::= Exp0 "+" Exp1;
+EAssign. Exp ::= Exp1;
+EMult. Exp1 ::= Exp1 "*" Exp2;
+EExp. Exp1 ::= Exp2;
+ENum. Exp2 ::= Integer; --String, 
+EString. Exp3 ::= String; --String, 
+
+coercions Exp15;
+separator Exp ",";
 
 --============ ASIGNACIONES ================> x := x + 1.
 SAsignacion.     Stm ::= Type Exp3 "=" " "; 
@@ -97,7 +135,11 @@ terminator Reg ";";
 SIdentBoolean. Type ::= String;
 SIdentChar. Type ::= Char;
 SIdentInteger. Type ::= Integer;
---SReal. Type ::= Real;
+SVoid. Type ::= "void";
+SString. Type ::= "string";
+TChar. Type ::= "char";
+TBool. Type ::= "bool";
+TInt. Type ::="int";
 
 
 --============ FUNCTIONS  ================> function suma (a, b : integer; var z : real) : integer;
