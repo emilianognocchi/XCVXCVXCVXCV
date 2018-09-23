@@ -15,7 +15,7 @@ terminator Def "";
 separator nonempty Def "";
 separator nonempty Args ";";
 
-SComment. Stm ::= "(*" String "*)";
+SComment. Stm ::= "(*" String "*)"; --esto falla en las pruebas !!!
 SProgram. Args ::= "program" String ";";
 SWriteLine. Stm ::= "writeln(" String ");";
 --SIdentificador. Ident ::="String"; esta linea falla pq no deja crear un identificador custom..!!
@@ -59,6 +59,7 @@ EIncrementoMenosDerecha. Exp14 ::= Exp14 "--";
 EIncrementoMasIzquierda. Exp13 ::= "++" Exp14;
 EIncrementoMenosIzquierda. Exp13 ::= "--" Exp15;
 ENegacion. Exp13 ::= "-" Exp13;
+EMod. Exp12 ::= Exp13 "mod" Exp13;
 ESuma. Exp12 ::= Exp13 "/" Exp13;
 ESuma. Exp12 ::= Exp13 "*" Exp13;
 ESuma. Exp11 ::= Exp12 "+" Exp12;
