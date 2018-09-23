@@ -9,15 +9,14 @@ DArgs. Args ::= "(" [Args] ")" "{" [Stm] "}";
 separator Args ","; 
 
 
+PProg. Program ::= [Def];
 Dfun. Def ::= Type Ident [Args] ;
 terminator Def ";";
 terminator Def "";
-
-PProg. Program ::= [Def];
-
-
 separator nonempty Def "";
 separator nonempty Args ";";
+
+
 
 separator Arg ",";
 -- int x
@@ -29,7 +28,6 @@ SFullDeclaracion. Stm ::= Type Ident "=" Exp ";";
 
 
 SExp.		Stm ::= Exp ";"
-
 SMay.       Stm ::= Exp2 "<" Exp2;
 SMen.       Stm ::= Exp2 ">" Exp2;
 SMayIgual.  Stm ::= Exp2 "<=" Exp2;
@@ -39,9 +37,9 @@ SIgual.     Stm ::= Exp2 "==" Exp2;
 --============ BLOQUES DE PROGRAMACION ================>
 SBloc.      Stm ::= [Stm] ;                   --??
 SBloc.      Stm ::= "{" [Stm] "}";
-SIfStm.     Stm ::= "if" "(" Exp ")" Stm;
-SIfStm.     Stm ::= "if" "(" Exp ")" Stm;         
-SIfElse.    Stm ::= "if" "(" Exp ")" Stm "else" Stm; 
+SIfStm.     Stm ::= "if" "(" Exp ")" Stm Else;
+SElseStm. 	Else ::= "else" Stm;
+SElseNull. Else ::=;         
 SWhile.     Stm ::= "while" "(" Exp ")" Stm;
 SFor.       Stm ::= "for" "(" Exp ")" Stm;
 SReturn.	Stm ::= "return" Exp";";
@@ -132,14 +130,14 @@ SRegistro. Registro ::= "record" [Reg] "end;";
 terminator Reg ";";
 
 --============ IDENTIFICADORES  ================> boolean, char, integer, real
-SIdentBoolean. Type ::= String;
-SIdentChar. Type ::= Char;
-SIdentInteger. Type ::= Integer;
-SVoid. Type ::= "void";
-SString. Type ::= "string";
-TChar. Type ::= "char";
-TBool. Type ::= "bool";
-TInt. Type ::="int";
+--SIdentBoolean. Type ::= String;
+--SIdentChar. Type ::= Char;
+--SIdentInteger. Type ::= Integer;
+SIdentVoid. Type ::= "void";
+SIdentString. Type ::= "string";
+TIdentChar. Type ::= "char";
+TIdentBool. Type ::= "bool";
+TIdentInt. Type ::="int";
 
 
 --============ FUNCTIONS  ================> function suma (a, b : integer; var z : real) : integer;
