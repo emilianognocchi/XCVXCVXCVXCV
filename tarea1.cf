@@ -3,12 +3,10 @@
 DefVacias. ListaDefiniciones ::=;
 ConsDef. ListaDefiniciones ::= Def ListaDefiniciones;
 
-
 EArgs. Argss ::= String;
 DArgs. Args ::= "(" [Argss] ")" "{" [Stm] "}";
 separator Args ","; 
 separator Argss ","; 
-
 
 PProg. Program ::= [Def];
 Dfun. Def ::= Type Ident [Args] ;
@@ -17,9 +15,10 @@ terminator Def "";
 separator nonempty Def "";
 separator nonempty Args ";";
 
-SComment. Args ::= "(*" String "*)";
-
---SIdentificador. Ident ::="String";
+SComment. Stm ::= "(*" String "*)";
+SProgram. Args ::= "program" String ";";
+SWriteLine. Stm ::= "writeln(" String ");";
+--SIdentificador. Ident ::="String"; esta linea falla pq no deja crear un identificador custom..!!
 separator Ident "";
 -- int x
 SDeclaracion.  Stm ::= Type Ident; 
@@ -60,11 +59,19 @@ EIncrementoMenosDerecha. Exp14 ::= Exp14 "--";
 EIncrementoMasIzquierda. Exp13 ::= "++" Exp14;
 EIncrementoMenosIzquierda. Exp13 ::= "--" Exp15;
 ENegacion. Exp13 ::= "-" Exp13;
-
-
+ESuma. Exp12 ::= Exp13 "/" Exp13;
+ESuma. Exp12 ::= Exp13 "*" Exp13;
+ESuma. Exp11 ::= Exp12 "+" Exp12;
+EResta. Exp11 ::= Exp11 "-" Exp11;
+EMayorIgual. Exp9 ::= Exp8 ">=" Exp8;
+EMenorIgual. Exp9 ::= Exp8 "<=" Exp8;
+EMayor. Exp9 ::= Exp8 ">" Exp8;
+EMenor. Exp9 ::= Exp8 "<" Exp8;
+EIgual. Exp8 ::= Exp8 "==" Exp8;
+EOr. Exp3 ::= Exp2 "||" Exp2;
+EAnd. Exp3 ::= Exp2 "&&" Exp2;
 EAdd. Exp0 ::= Exp0 "+" Exp1;
-EAssign. Exp ::= Exp1;
-EMult. Exp1 ::= Exp1 "*" Exp2;
+EAssign. Exp ::= Exp1; 
 EExp. Exp1 ::= Exp2;
 ENum. Exp2 ::= Integer; --String,  
 
@@ -118,7 +125,6 @@ SArrayReal. Stm 	::= "array[" Integer ".." Integer "] of real;"; --???????
 SArrayString. Stm 	::= "array[" Integer ".." Integer "] of String;"; --???????
 SArrayInteger. Stm 	::= "array[" Integer ".." Integer "] of Integer;"; --???????
 SArrayBoolean. Stm 	::= "array[" Integer ".." Integer "] of Boolean;"; --???????
-
 
 
 --============ REGISTROS  ================> 
