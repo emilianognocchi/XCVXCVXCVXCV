@@ -5,8 +5,9 @@ ConsDef. ListaDefiniciones ::= Def ListaDefiniciones;
 
 
 EArgs. Argss ::= String;
-DArgs. Args ::= "(" [Args] ")" "{" [Stm] "}";
+DArgs. Args ::= "(" [Argss] ")" "{" [Stm] "}";
 separator Args ","; 
+separator Argss ","; 
 
 
 PProg. Program ::= [Def];
@@ -16,18 +17,19 @@ terminator Def "";
 separator nonempty Def "";
 separator nonempty Args ";";
 
+SComment. Args ::= "(*" String "*)";
 
-
-separator Arg ",";
+--SIdentificador. Ident ::="String";
+separator Ident "";
 -- int x
 SDeclaracion.  Stm ::= Type Ident; 
 -- int i,j,k;
-SListaDeclaraciones ::= Type Ident "," [Ident] ";"; 
+SListaDeclaraciones. Stm ::= Type Ident "," [Ident] ";"; 
 -- int x = 3;
 SFullDeclaracion. Stm ::= Type Ident "=" Exp ";"; 
 
 
-SExp.		Stm ::= Exp ";"
+SExp.		Stm ::= Exp ";";
 SMay.       Stm ::= Exp2 "<" Exp2;
 SMen.       Stm ::= Exp2 ">" Exp2;
 SMayIgual.  Stm ::= Exp2 "<=" Exp2;
@@ -36,7 +38,7 @@ SIgual.     Stm ::= Exp2 "==" Exp2;
 
 --============ BLOQUES DE PROGRAMACION ================>
 SBloc.      Stm ::= [Stm] ;                   --??
-SBloc.      Stm ::= "{" [Stm] "}";
+SBlocFull.      Stm ::= "{" [Stm] "}";
 SIfStm.     Stm ::= "if" "(" Exp ")" Stm Else;
 SElseStm. 	Else ::= "else" Stm;
 SElseNull. Else ::=;         
@@ -48,12 +50,12 @@ SReturn.	Stm ::= "return" Exp";";
 EInt. Exp15 ::= Integer;
 EDouble. Exp15 ::= Double;
 EString. Exp15 ::= String;
-EString. Exp15 ::= "true";
-EString. Exp15 ::= "false";
-EString. Exp15 ::= Id; 
+ETrue. Exp15 ::= "true";
+EFalse. Exp15 ::= "false";
+EIdent. Exp15 ::= Ident; 
 
-EIncrementoMasDerecha. Exp14 ::= "++";
-EIncrementoMenosDerecha. Exp14 ::= --";
+EIncrementoMasDerecha. Exp14 ::= Exp14 "++";
+EIncrementoMenosDerecha. Exp14 ::= Exp14 "--";
 
 EIncrementoMasIzquierda. Exp13 ::= "++" Exp14;
 EIncrementoMenosIzquierda. Exp13 ::= "--" Exp15;
@@ -64,19 +66,20 @@ EAdd. Exp0 ::= Exp0 "+" Exp1;
 EAssign. Exp ::= Exp1;
 EMult. Exp1 ::= Exp1 "*" Exp2;
 EExp. Exp1 ::= Exp2;
-ENum. Exp2 ::= Integer; --String, 
-EString. Exp3 ::= String; --String, 
+ENum. Exp2 ::= Integer; --String,  
 
-coercions Exp15;
+--coercions Exp15;
 separator Exp ",";
 
 --============ ASIGNACIONES ================> x := x + 1.
-SAsignacion.     Stm ::= Type Exp3 "=" " "; 
-SAsignVacio.     Stm ::= Type Exp3 "=" ""; 
+SAsignacion.     Stm ::= Type Ident "=" " "; 
+SAsignVacio.     Stm ::= Type Ident "=" ""; 
 separator Stm "";
+
+SLiteral. Lit ::= String;
  
 DeclaracionConstante. DeclConst ::= Ident  "=" Lit;
-SConst. Ident ::= "const" [ DeclConst ];  --identificador 
+SConst. Const ::= "const" [ DeclConst ];  --identificador 
 terminator DeclConst ";";
  
 DeclaracionType. Type ::= Type "=" Type ";";
@@ -88,6 +91,7 @@ separator nonempty Stm ";";
 SIntrucction. Instruction ::= [Type];
 separator nonempty  Instruction ";";
 
+TIdent. Type ::= Ident;
 TInt. Type ::= "void";
 TChar. Type ::= "char";
 TString. Type ::= "string";
@@ -125,7 +129,7 @@ SArrayBoolean. Stm 	::= "array[" Integer ".." Integer "] of Boolean;"; --???????
 --end
 
 SVariableDeRegistroInteger. Reg ::= [Stm] ":" Exp2;   --puse STM pero esta mal. solo para q compile
-SVariableDeRegistroString. Reg ::= [Stm] ":" Exp3;  
+SVariableDeRegistroString. Reg ::= [Stm] ":" Ident;  
 SRegistro. Registro ::= "record" [Reg] "end;";
 terminator Reg ";";
 
@@ -138,7 +142,6 @@ SIdentString. Type ::= "string";
 TIdentChar. Type ::= "char";
 TIdentBool. Type ::= "bool";
 TIdentInt. Type ::="int";
-
 
 --============ FUNCTIONS  ================> function suma (a, b : integer; var z : real) : integer;
 
