@@ -1,0 +1,12 @@
+comment "(" ")";
+
+SProgram. Program ::= "program" Type ";" BloqueBegin; --Const BloqueVariables BloqueVariables BloquePrincipal [Funciones] [Instrucciones];
+TIdent. Type ::= Ident;
+TInt. Type ::= "void";
+TChar. Type ::= "char";
+TString. Type ::= "string";
+
+SBloque. BloqueBegin ::= "begin" [Stm] "end.";
+
+SDeclaracion.  Stm ::= Type Ident; 
+separator Stm "";
