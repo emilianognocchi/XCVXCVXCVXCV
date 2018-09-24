@@ -7,6 +7,20 @@ TChar. Type ::= "char";
 TString. Type ::= "string";
 
 SBloque. BloqueBegin ::= "begin" [Stm] "end.";
+ 
 
-SDeclaracion.  Stm ::= Type Ident; 
+SSentencia. Stm ::= Ident [ Exp ];
+
+SSentencia2. Stm ::= Ident "(" [ Exp ] ")";
+--SCallEmpty. Stm ::= Ident; -- OK
 separator Stm "";
+
+EInt. Exp15 ::= Integer;
+EDouble. Exp15 ::= Double;
+EString. Exp15 ::= String;
+ETrue. Exp15 ::= "true";
+EFalse. Exp15 ::= "false";
+
+SExp. Exp ::= Exp15;
+separator Exp "";
+
