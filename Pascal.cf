@@ -1,14 +1,21 @@
 comment "(*" "*)";
 
-SProgram. Program ::= "program" Type ";" BloqueBegin; --Const BloqueVariables BloqueVariables BloquePrincipal [Funciones] [Instrucciones];
+SProgram. Program ::= "program" Type ";" BloqueBegin BloqueVariables; --Const BloqueVariables BloqueVariables BloquePrincipal [Funciones] [Instrucciones];
 TIdent. Type ::= Ident;
 TInt. Type ::= "void";
 TChar. Type ::= "char";
 TString. Type ::= "string";
-
-SBloque. BloqueBegin ::= "begin" [Stm] "end.";
  
+SBloqueBegin. BloqueBegin ::= "begin" [Stm] "end.";
 
+
+SBloqueVariables. BloqueVariables ::= "var" [DeclaracionVariables] ;
+SDeclaracionVariables. DeclaracionVariables ::= [Ident] ":" Type ";";
+separator DeclaracionVariables ";";
+separator Ident ","; 
+
+
+ 
 SSentencia. Stm ::= Ident [ Exp ];
 
 SSentencia2. Stm ::= Ident "(" [ Exp ] ");";
