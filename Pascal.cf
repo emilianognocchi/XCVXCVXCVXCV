@@ -1,10 +1,18 @@
 comment "(*" "*)";
 
-SProgram. Program ::= "program" Type ";" BloqueConst BloqueVariables BloqueBegin; --Const BloqueVariables BloqueVariables BloquePrincipal [Funciones] [Instrucciones];
+SProgram. Program ::= "program" Type ";" BloqueConst BloqueTipos BloqueVariables BloqueBegin; --Const BloqueVariables BloqueVariables BloquePrincipal [Funciones] [Instrucciones];
 TIdent. Type ::= Ident;
-TInt. Type ::= "void";
+--TVoid. Type ::= "void";
 TChar. Type ::= "char";
 TString. Type ::= "string";
+
+STiposVacio. BloqueTipos ::=;
+STipos. BloqueTipos ::= "type" [DefinicionTipos];
+SDefinicionTipos. DefinicionTipos ::= Ident "=" TipoConcreto;
+STipoConcretoEnum. TipoConcreto ::= Enumerados;
+STipoConcretoRango. TipoConcreto ::= RangoIdent;
+STipoConcretoArray. TipoConcreto ::= RangoArray;
+separator DefinicionTipos ";"; 
  
 BloqueBeginVacio. BloqueBegin ::=;
 BloqueConstVacio. BloqueConst ::=;
@@ -19,23 +27,23 @@ SLitChar. Lit ::= Char;
 
 
 SBloqueBegin. BloqueBegin ::= "begin" [Stm] "end.";
+SAsignacion. Stm ::= Variable ":=" Exp;
+
+SVariableIdent. Variable ::= Ident; --preguntar por ident !!
+SVariableIndexada. Variable ::= "[" [ Exp ] "]";
 
 BloqueVariablesVacio. BloqueVariables ::=;
 
 SBloqueVariables. BloqueVariables ::= "var" [DeclaracionVariables];
 SDeclaracionVariables. DeclaracionVariables ::= [Ident] ":" Type;
 terminator DeclaracionVariables ";";
-separator Ident ",";
-
---SStmVacio. Stm ::=;
---separator Stm ";"; --ESTO DA CONFLICTOS
+separator Ident ","; 
  
 SStmVacio. Stm  ::=;
 SSentenciaVacia. Stm ::= Ident;
 SSentencia. Stm ::= Ident "(" [ Exp ] ")";
 
 separator nonempty Stm ";";
---separator Exp ",";
 
 EInt. Exp15 ::= Integer;
 EDouble. Exp15 ::= Double;
@@ -47,4 +55,19 @@ EIdent. Exp15 ::= Ident;
 
 SExp. Exp ::= Exp15;
 separator Exp ",";
+
+--============ TIPOS ENUMERADOS  ================> 
+TEnumerados. Enumerados ::= "(" [Ident] ")";
+TRangoInteger. RangoIdent ::=  Integer ".." Integer;
+TRangoChar. RangoIdent ::=  Char ".." Char;
+TRangoIdent. RangoIdent ::=  Ident ".." Ident;
+SRangoArray. RangoArray	::= "array" "[" Integer ".." Integer "]" "of" Type ";"; 
+
+
+
+
+
+
+
+
 
