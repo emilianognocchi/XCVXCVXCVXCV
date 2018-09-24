@@ -15,9 +15,25 @@ terminator Def "";
 separator nonempty Def "";
 separator nonempty Args ";";
 
-SComment. Stm ::= "(*" String "*)"; --esto falla en las pruebas !!!
-SProgram. Args ::= "program" String ";";
-SWriteLine. Stm ::= "writeln(" String ");";
+SComentario. Comment ::= Type;
+separator Comment "";
+
+SCommentarios. Def ::= "(*" [Comment]"*)";
+SProgram. Def ::= "program" Type ";"  [BloquePrincipal];
+
+SWriteline. Stm ::= "writeln(" String ");";
+SWritelineVacio. Stm ::= "writeln;";
+SWrite. Stm ::= "Write(" String ");";  --esta linea aumenta muchisimo los conflictos!!!!!
+SReadline. Stm ::= "readln(" [Ident] ");"; --esta linea aumenta muchisimo los conflictos!!!!!
+SReadLineVacio. Stm ::= "Readln;"; --esta linea aumenta muchisimo los conflictos!!!!!
+
+SWriteLine. Stm ::= "Writeln(\"" [TextoConVariables] "\");"; --esta linea aumenta muchisimo los conflictos!!!!!
+
+STexto. TextoConVariables ::= [Ident];
+--SVariables. TextoConVariables ::= [Ident] "," [Ident]; no esta funcionando, el ejemplo: Writeln("Your full name is ", name, " ", surname);
+separator TextoConVariables ",";
+
+
 --SIdentificador. Ident ::="String"; esta linea falla pq no deja crear un identificador custom..!!
 separator Ident "";
 -- int x
@@ -40,7 +56,7 @@ SBloc.      Stm ::= [Stm] ;                   --??
 SBlocFull.      Stm ::= "{" [Stm] "}";
 SIfStm.     Stm ::= "if" "(" Exp ")" Stm Else;
 SElseStm. 	Else ::= "else" Stm;
-SElseNull. Else ::=;         
+SElseNull.  Else ::=;         
 SWhile.     Stm ::= "while" "(" Exp ")" Stm;
 SFor.       Stm ::= "for" "(" Exp ")" Stm;
 SReturn.	Stm ::= "return" Exp";";
@@ -86,15 +102,30 @@ separator Stm "";
 
 SLiteral. Lit ::= String;
  
-DeclaracionConstante. DeclConst ::= Ident  "=" Lit;
-SConst. Const ::= "const" [ DeclConst ];  --identificador 
-terminator DeclConst ";";
+
  
 DeclaracionType. Type ::= Type "=" Type ";";
 --SType. Type ::= "type" [ ];
 
 --============ INSTRUCTIONS =================> program ...; ... begin ... <instruccion>; <instruccion>; <instruccion> ... end.
-SBegin. Stm ::= "begin " [Instruction] "end.";
+
+--============ VARIABLES  ================> 
+SVariable. BloquePrincipal 	::= "var" [NombreVariables] ":" Type ";";
+SNombreVariables. NombreVariables ::= Ident;
+separator NombreVariables ",";
+
+--SBloque2. BloquePrincipal ::= "var" [NombreVariables] ":" Type";" "begin" [Stm] "end."; -- con esta linea se cuelga....
+
+
+SBloque. BloquePrincipal ::= "begin" [Stm] "end.";
+separator nonempty BloquePrincipal ";";
+
+
+DeclaracionConstante. DeclConst ::= Ident  "=" Lit;
+SConst. BloquePrincipal ::= "const" [ DeclConst ]; -- mismo problema que con el begin, no se como concatenar cada una de las partes!
+terminator DeclConst ";";
+
+
 separator nonempty Stm ";";
 SIntrucction. Instruction ::= [Type];
 separator nonempty  Instruction ";";
@@ -141,14 +172,16 @@ SRegistro. Registro ::= "record" [Reg] "end;";
 terminator Reg ";";
 
 --============ IDENTIFICADORES  ================> boolean, char, integer, real
---SIdentBoolean. Type ::= String;
---SIdentChar. Type ::= Char;
---SIdentInteger. Type ::= Integer;
 SIdentVoid. Type ::= "void";
 SIdentString. Type ::= "string";
+SIdentStringClass. Type ::= "String";
 TIdentChar. Type ::= "char";
 TIdentBool. Type ::= "bool";
 TIdentInt. Type ::="int";
+--TComa. Type ::="\""; --funciona pero aumenta mucho los conflictos
+--TComilla. Type ::=","; --funciona pero aumenta mucho los conflictos
+
+--TComaSimple. Type ::="'";
 
 --============ FUNCTIONS  ================> function suma (a, b : integer; var z : real) : integer;
 
