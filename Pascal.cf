@@ -1,12 +1,22 @@
 comment "(*" "*)";
 
-SProgram. Program ::= "program" Type ";" BloqueVariables BloqueBegin; --Const BloqueVariables BloqueVariables BloquePrincipal [Funciones] [Instrucciones];
+SProgram. Program ::= "program" Type ";" BloqueConst BloqueVariables BloqueBegin; --Const BloqueVariables BloqueVariables BloquePrincipal [Funciones] [Instrucciones];
 TIdent. Type ::= Ident;
 TInt. Type ::= "void";
 TChar. Type ::= "char";
 TString. Type ::= "string";
  
- BloqueBeginVacio. BloqueBegin ::=;
+BloqueBeginVacio. BloqueBegin ::=;
+BloqueConstVacio. BloqueConst ::=;
+SBloqueConst. BloqueConst ::= "const" [DefinicionConstantes];
+SDefinicionConstantes. DefinicionConstantes ::= Ident "=" Lit;
+terminator DefinicionConstantes ";";
+
+SLitInteger. Lit ::= Integer;
+SLitDouble. Lit ::= Double;
+SLitString. Lit ::= String;
+SLitChar. Lit ::= Char;
+
 
 SBloqueBegin. BloqueBegin ::= "begin" [Stm] "end.";
 
@@ -21,6 +31,7 @@ separator Ident ",";
 --separator Stm ";"; --ESTO DA CONFLICTOS
  
 SStmVacio. Stm  ::=;
+SSentenciaVacia. Stm ::= Ident;
 SSentencia. Stm ::= Ident "(" [ Exp ] ")";
 
 separator nonempty Stm ";";
