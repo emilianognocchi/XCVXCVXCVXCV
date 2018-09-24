@@ -3,35 +3,17 @@
 DefVacias. ListaDefiniciones ::=;
 ConsDef. ListaDefiniciones ::= Def ListaDefiniciones;
 
-EArgs. Argss ::= String;
-DArgs. Args ::= "(" [Argss] ")" "{" [Stm] "}";
-separator Args ","; 
-separator Argss ","; 
+comment "(*" "*)"; 
+SProgram. Program ::= "program" Type ";" Const BloqueVariables BloqueVariables BloquePrincipal [Funciones] [Instrucciones];
+BloqueVariables. BloqueVariables ::= var[Variables]
 
-PProg. Program ::= [Def];
-Dfun. Def ::= Type Ident [Args] ;
-terminator Def ";";
-terminator Def "";
-separator nonempty Def "";
-separator nonempty Args ";";
 
-SComentario. Comment ::= Type;
-separator Comment "";
-
-SCommentarios. Def ::= "(*" [Comment]"*)";
-SProgram. Def ::= "program" Type ";"  [BloquePrincipal];
-
-SWriteline. Stm ::= "writeln(" String ");";
+SWriteline. Stm ::= "writeln(" Literal ");";
 SWritelineVacio. Stm ::= "writeln;";
-SWrite. Stm ::= "Write(" String ");";  --esta linea aumenta muchisimo los conflictos!!!!!
-SReadline. Stm ::= "readln(" [Ident] ");"; --esta linea aumenta muchisimo los conflictos!!!!!
+SWrite. Stm ::= "Write(" Literal ");";  --esta linea aumenta muchisimo los conflictos!!!!!
+SReadline. Stm ::= "readln(" [Literal] ");"; --esta linea aumenta muchisimo los conflictos!!!!!
 SReadLineVacio. Stm ::= "Readln;"; --esta linea aumenta muchisimo los conflictos!!!!!
-
 SWriteLine. Stm ::= "Writeln(\"" [TextoConVariables] "\");"; --esta linea aumenta muchisimo los conflictos!!!!!
-
-STexto. TextoConVariables ::= [Ident];
---SVariables. TextoConVariables ::= [Ident] "," [Ident]; no esta funcionando, el ejemplo: Writeln("Your full name is ", name, " ", surname);
-separator TextoConVariables ",";
 
 
 --SIdentificador. Ident ::="String"; esta linea falla pq no deja crear un identificador custom..!!
@@ -43,16 +25,17 @@ SListaDeclaraciones. Stm ::= Type Ident "," [Ident] ";";
 -- int x = 3;
 SFullDeclaracion. Stm ::= Type Ident "=" Exp ";"; 
 
-
 SExp.		Stm ::= Exp ";";
 SMay.       Stm ::= Exp2 "<" Exp2;
 SMen.       Stm ::= Exp2 ">" Exp2;
 SMayIgual.  Stm ::= Exp2 "<=" Exp2;
 SMenIgual.  Stm ::= Exp2 ">=" Exp2;
 SIgual.     Stm ::= Exp2 "==" Exp2;
-
+SFunction. Stm ::= Ident "("  [ Exp ] ")"; --OK
+SCallEmpty. Stm ::= Ident; -- OK
+		
 --============ BLOQUES DE PROGRAMACION ================>
-SBloc.      Stm ::= [Stm] ;                   --??
+SBloc.      Stm ::= [Stm];       
 SBlocFull.      Stm ::= "{" [Stm] "}";
 SIfStm.     Stm ::= "if" "(" Exp ")" Stm Else;
 SElseStm. 	Else ::= "else" Stm;
@@ -101,6 +84,9 @@ SAsignVacio.     Stm ::= Type Ident "=" "";
 separator Stm "";
 
 SLiteral. Lit ::= String;
+SLiteral2. Lit ::= Double;
+SLiteral3. Lit ::= Char;
+
  
 
  
@@ -110,9 +96,9 @@ DeclaracionType. Type ::= Type "=" Type ";";
 --============ INSTRUCTIONS =================> program ...; ... begin ... <instruccion>; <instruccion>; <instruccion> ... end.
 
 --============ VARIABLES  ================> 
-SVariable. BloquePrincipal 	::= "var" [NombreVariables] ":" Type ";";
-SNombreVariables. NombreVariables ::= Ident;
-separator NombreVariables ",";
+SVariable. BloqueVariables 	::= "var" [NombreVariables] ":" Type ";";
+SNombreVariables. BloqueVariables ::= Ident;
+separator BloqueVariables ",";
 
 --SBloque2. BloquePrincipal ::= "var" [NombreVariables] ":" Type";" "begin" [Stm] "end."; -- con esta linea se cuelga....
 
@@ -149,14 +135,11 @@ SSubrangString. Type ::= String ".." String ";";
 
 
 --============ PUNTEROS  ================> ^nodolista
-SPuntero. Type ::= "^" Ident; --???????
+SPuntero. Type ::= "^" Ident;
 
 
 --============ ARREGLOS  ================> array[1..50] of integer
-SArrayReal. Stm 	::= "array[" Integer ".." Integer "] of real;"; --???????
-SArrayString. Stm 	::= "array[" Integer ".." Integer "] of String;"; --???????
-SArrayInteger. Stm 	::= "array[" Integer ".." Integer "] of Integer;"; --???????
-SArrayBoolean. Stm 	::= "array[" Integer ".." Integer "] of Boolean;"; --???????
+SArrayString. Stm 	::= "array[" Integer ".." Integer "] of" Args ";"; 
 
 
 --============ REGISTROS  ================> 
@@ -178,10 +161,9 @@ SIdentStringClass. Type ::= "String";
 TIdentChar. Type ::= "char";
 TIdentBool. Type ::= "bool";
 TIdentInt. Type ::="int";
---TComa. Type ::="\""; --funciona pero aumenta mucho los conflictos
---TComilla. Type ::=","; --funciona pero aumenta mucho los conflictos
+TComa. Type ::="\""; --funciona pero aumenta mucho los conflictos
 
---TComaSimple. Type ::="'";
+TComaSimple. Type ::="'";
 
 --============ FUNCTIONS  ================> function suma (a, b : integer; var z : real) : integer;
 
