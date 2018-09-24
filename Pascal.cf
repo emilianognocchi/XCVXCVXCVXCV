@@ -1,4 +1,4 @@
-comment "(" ")";
+comment "(*" "*)";
 
 SProgram. Program ::= "program" Type ";" BloqueBegin; --Const BloqueVariables BloqueVariables BloquePrincipal [Funciones] [Instrucciones];
 TIdent. Type ::= Ident;
@@ -11,7 +11,7 @@ SBloque. BloqueBegin ::= "begin" [Stm] "end.";
 
 SSentencia. Stm ::= Ident [ Exp ];
 
-SSentencia2. Stm ::= Ident "(" [ Exp ] ")";
+SSentencia2. Stm ::= Ident "(" [ Exp ] ");";
 --SCallEmpty. Stm ::= Ident; -- OK
 separator Stm "";
 
