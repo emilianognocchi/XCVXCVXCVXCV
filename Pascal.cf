@@ -34,6 +34,7 @@ SLitChar. Lit ::= Char;
 
 SBloqueBegin. BloqueBegin ::= "begin" [Stm] "end.";
 SAsignacion. Stm ::= Variable ":=" Exp;
+
 SDesignacionCampoAExpresion.  Stm ::= Variable "." Ident ":=" [Exp];
 
 --============ VARIABLES  ================> 
@@ -55,15 +56,43 @@ SSentencia. Stm ::= Ident "(" [ Exp ] ")";
 
 separator nonempty Stm ";";
 
-EInt. Exp15 ::= Integer;
-EDouble. Exp15 ::= Double;
-EString. Exp15 ::= String;
-ETrue. Exp15 ::= "true";
-EFalse. Exp15 ::= "false";
+EInt. Exp4 ::= Integer;
+EDouble. Exp4 ::= Double;
+EString. Exp4 ::= String;
+ETrue. Exp4 ::= "true";
+EFalse. Exp4 ::= "false";
+EIdent. Exp4 ::= Ident;
 
-EIdent. Exp15 ::= Ident;
 
-SExp. Exp ::= Exp15;
+-------MAYOR -3 PRECEDENCIA =====
+SMenorIgual. Exp3 ::= Exp3 "<" Exp4;
+SMayorIgual. Exp3 ::= Exp3 "<=" Exp4 ;
+SMayor. Exp3 ::= Exp3 ">" Exp4;
+SDiferentes. Exp3 ::= Exp3 "<>" Exp4 ;
+
+SMenor. Exp3 ::= Exp3 ">=" Exp4;
+SIgual. Exp3 ::= Exp3 "=" Exp4;
+SIn. Exp3 ::= Exp3 "in" Exp4;
+SSs. Exp3 ::= Exp4;
+
+-------MAYOR -2 PRECEDENCIA =====
+SOr. Exp2 ::= Exp2 "or" Exp3;
+SMenos. Exp2 ::= Exp2 "-" Exp3;
+SMas. Exp2 ::= Exp2 "+" Exp3;
+SS. Exp2 ::= Exp3;
+
+-------MAYOR -1 PRECEDENCIA =====
+SMod. Exp1 ::= Exp1 "mod" Exp2; 
+SDivision. Exp1 ::= Exp1 "div" Exp2;
+SDiv. Exp1 ::= Exp1 "/" Exp2;
+SAnd. Exp1 ::= Exp1 "and" Exp2;
+SMultiplicacion. Exp1 ::= Exp1 "*"Exp2;
+SM. Exp1 ::= Exp2;
+
+
+-------MAYOR  PRECEDENCIA =====
+SNegacion. Exp ::= "not" Exp;
+SExp. Exp ::= Exp1;
 separator Exp ",";
 
 --============ TIPOS ENUMERADOS  ================> 
@@ -73,6 +102,9 @@ TRangoChar. RangoIdent ::=  Char ".." Char;
 TRangoIdent. RangoIdent ::=  Ident ".." Ident;
 TRangoArray. RangoArray	::= "array" "[" Integer ".." Integer "]" "of" Type ";"; 
 
+
+SRepeat. Stm ::= "repeat" [Stm] "until" [Exp]; 
+SFor. Stm ::= "for" Ident ":=" Exp "to" Exp "do" Stm;
 
 
 
