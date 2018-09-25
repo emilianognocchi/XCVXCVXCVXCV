@@ -8,7 +8,13 @@ TString. Type ::= "string";
 
 STiposVacio. BloqueTipos ::=;
 STipos. BloqueTipos ::= "type" [DefinicionTipos];
+
+TRangoRegistro. TipoRegistro ::= "record" [CampoRegistro] "end";
+TCampoRegistro. CampoRegistro ::= [Ident] ":" TipoConcreto;
+separator CampoRegistro ";";
+
 SDefinicionTipos. DefinicionTipos ::= Ident "=" TipoConcreto;
+SRegistro. TipoConcreto ::= TipoRegistro;
 STipoConcretoEnum. TipoConcreto ::= Enumerados;
 STipoConcretoRango. TipoConcreto ::= RangoIdent;
 STipoConcretoArray. TipoConcreto ::= RangoArray;
@@ -28,9 +34,13 @@ SLitChar. Lit ::= Char;
 
 SBloqueBegin. BloqueBegin ::= "begin" [Stm] "end.";
 SAsignacion. Stm ::= Variable ":=" Exp;
+SDesignacionCampoAExpresion.  Stm ::= Variable "." Ident ":=" [Exp];
 
-SVariableIdent. Variable ::= Ident; --preguntar por ident !!
+--============ VARIABLES  ================> 
+SVariableIdent. Variable ::= Ident; 
 SVariableIndexada. Variable ::= "[" [ Exp ] "]";
+SDesignacionCampo.  Exp ::= Variable "." Ident; --PREGUNTAR SI ESTO ESTA BIEN, PRUEBA 5
+
 
 BloqueVariablesVacio. BloqueVariables ::=;
 
@@ -61,7 +71,7 @@ TEnumerados. Enumerados ::= "(" [Ident] ")";
 TRangoInteger. RangoIdent ::=  Integer ".." Integer;
 TRangoChar. RangoIdent ::=  Char ".." Char;
 TRangoIdent. RangoIdent ::=  Ident ".." Ident;
-SRangoArray. RangoArray	::= "array" "[" Integer ".." Integer "]" "of" Type ";"; 
+TRangoArray. RangoArray	::= "array" "[" Integer ".." Integer "]" "of" Type ";"; 
 
 
 
