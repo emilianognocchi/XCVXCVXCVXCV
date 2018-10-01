@@ -1,6 +1,6 @@
 comment "(*" "*)";
 
-SProgram. Program ::= "program" Type ";" BloquesPrincipales; 
+SProgram. Program ::= "program" Type ";" BloquesPrincipales "."; 
 TIdent. Type ::= Ident;
 --TVoid. Type ::= "void";
 TChar. Type ::= "char";
@@ -12,17 +12,6 @@ SBloquesPrincipales. BloquesPrincipales ::= BloqueConst BloqueTipos BloqueVariab
 STiposVacio. BloqueTipos ::=;
 STipos. BloqueTipos ::= "type" [DefinicionTipos];
 
-TRangoRegistro. TipoRegistro ::= "record" [CampoRegistro] "end";
-TCampoRegistro. CampoRegistro ::= [Ident] ":" TipoConcreto;
-separator CampoRegistro ";";
-
-SDefinicionTipos. DefinicionTipos ::= Ident "=" TipoConcreto;
-SRegistro. TipoConcreto ::= TipoRegistro;
-STipoConcretoEnum. TipoConcreto ::= Enumerados;
-STipoConcretoRango. TipoConcreto ::= RangoIdent;
-STipoConcretoArray. TipoConcreto ::= RangoArray;
-separator DefinicionTipos ";"; 
- 
 BloqueBeginVacio. BloqueBegin ::=;
 BloqueConstVacio. BloqueConst ::=;
 SBloqueConst. BloqueConst ::= "const" [DefinicionConstantes];
@@ -35,21 +24,32 @@ SLitString. Lit ::= String;
 SLitChar. Lit ::= Char;
 
 
-SBloqueBegin. BloqueBegin ::= "begin" [Stm] "end.";
+SBloqueBegin. BloqueBegin ::= "begin" [Stm] "end";
 SAsignacion. Stm ::= Variable ":=" Exp;
 
 SDesignacionCampoAExpresion.  Stm ::= Variable "." Ident ":=" [Exp];
+SDefinicionTipos. 	DefinicionTipos ::= Ident "=" TipoConcreto;
+separator DefinicionTipos ";"; 
+
+
+STipoConcretoEnum. 	TipoConcreto ::= Enumerados;
+STipoConcretoRango. TipoConcreto ::= RangoIdent;
+STipoConcretoArray. TipoConcreto ::= RangoArray;
+SRegistro. 			TipoConcreto ::= TipoRegistro;
+
+TRangoRegistro. TipoRegistro ::= "record" [CampoRegistro] "end";  ---prueba 5 falla por esto
+TCampoRegistro. CampoRegistro ::= Ident ":" TipoConcreto;
+separator CampoRegistro ";";
+
 
 --============ VARIABLES  ================> 
-SVariableIdent. Variable ::= Ident; 
-SVariableIndexada. Variable ::= "[" [ Exp ] "]";
+SVariableIdent. 	Variable ::= Ident; 
+SVariableIndexada. 	Variable ::= "[" [ Exp ] "]";
 SDesignacionCampo.  Exp ::= Variable "." Ident;
 
-
-BloqueVariablesVacio. BloqueVariables ::=;
-
-SBloqueVariables. BloqueVariables ::= "var" [DeclaracionVariables];
-SDeclaracionVariables. DeclaracionVariables ::= [Ident] ":" Type;
+BloqueVariablesVacio. 	BloqueVariables ::=;
+SBloqueVariables. 		BloqueVariables ::= "var" [DeclaracionVariables];
+SDeclaracionVariables. 	DeclaracionVariables ::= [Ident] ":" Type;
 terminator DeclaracionVariables ";";
 separator Ident ","; 
  
@@ -57,15 +57,15 @@ SStmVacio. Stm  ::=;
 SSentenciaVacia. Stm ::= Ident;
 SSentencia. Stm ::= Ident "(" [ Exp ] ")";
 
-separator nonempty Stm ";"; -- esto da un monton de conflictos!!!
+separator nonempty Stm ";";
 
+--============ EXPRESIONES  ================> 
 
 ------- NIVEL 0 =====
-SNegacion. Exp ::= "not" Exp;
 separator Exp ",";
 coercions Exp 4;
 
-------- NIVEL 1 =====
+------- NIVEL 1 ===== 
 SMenorIgual. Exp1 ::= Exp1 "<" Exp2;
 SMayorIgual. Exp1 ::= Exp1 "<=" Exp2 ;
 SMayor. Exp1 ::= Exp1 ">" Exp2;
@@ -93,29 +93,34 @@ EString. Exp4 ::= String;
 ETrue. Exp4 ::= "true";
 EFalse. Exp4 ::= "false";
 EIdent. Exp4 ::= Ident;
-
+ENegacion. Exp4 ::= "not" Exp4; -- no esta funcionando !!!!
 
 --============ TIPOS ENUMERADOS  ================> 
-TEnumerados. Enumerados ::= "(" [Ident] ")";
-TRangoInteger. RangoIdent ::=  Integer ".." Integer;
-TRangoChar. RangoIdent ::=  Char ".." Char;
-TRangoIdent. RangoIdent ::=  Ident ".." Ident;
-TRangoArray. RangoArray	::= "array" "[" Integer ".." Integer "]" "of" Type ";"; 
+TEnumerados. 	Enumerados ::= "(" [Ident] ")";
+TRangoInteger. 	RangoIdent ::=  Integer ".." Integer;
+TRangoChar. 	RangoIdent ::=  Char ".." Char;
+TRangoIdent. 	RangoIdent ::=  Ident ".." Ident;
+TRangoArray. 	RangoArray	::= "array" "[" Integer ".." Integer "]" "of" Type ";"; 
 
+--============ ESTRUCTURAS DE CONTROL Y REPETICION  ================> 
+SRepeat. 	Stm ::= "repeat" [Stm] "until" [Exp]; 
+SFor. 		Stm ::= "for" Ident ":=" Exp "to" Exp "do" Stm;
+SIf. 		Stm ::= "if"  Exp "then" Stm;
+SIfElse. 	Stm ::= "if"  Exp  "then" Stm "else" Stm;
+SWhile. 	Stm ::= "while" "(" Exp ")" Stm;
+SCase. 		Stm ::= "case" "(" Discriminante ")" "of" [Ramas] "end";
+SDiscriminante. Discriminante ::= Ident;
+SRamas. 	Ramas ::= [Lit] ":" BloqueBegin;  -- reduce / reduce 
+SRamasStm. 	Ramas ::= [Lit] ":" Stm;  -- reduce / reduce 
 
-SRepeat. Stm ::= "repeat" [Stm] "until" [Exp]; 
-SFor. Stm ::= "for" Ident ":=" Exp "to" Exp "do" Stm;
+separator nonempty Ramas ";";
+separator Lit ",";
 
-
+--============ FUNCIONES Y PRODCEDIMIENTOS  ================> 
 SProcedure. Stm ::= "procedure" Ident "(" [VariablesParametro] ")";
-SVariablesParametroPorReferencia. VariablesParametro ::= "var" DeclaracionVariables;
-SVariablesParametroPorValor. VariablesParametro ::= DeclaracionVariables;
+SVariablesParametroPorReferencia. 	VariablesParametro ::= "var" DeclaracionVariables;
+SVariablesParametroPorValor. 		VariablesParametro ::= DeclaracionVariables;
 separator VariablesParametro ";";
-
-
-SIf. Stm ::= "if" "(" Exp ")" "then" Stm;
-SIfElse. Stm ::= "if" "(" Exp ")" "then" Stm "else" Stm;
-SWhile. Stm ::= "while" "(" Exp ")" Stm;
 
 --SFunction. Stm ::= "function" Ident "(" [VariablesParametro] ")" ":" Type ";" BloquesPrincipales; 
 
