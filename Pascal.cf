@@ -6,7 +6,7 @@ TIdent. Type ::= Ident;
 TChar. Type ::= "char";
 TString. Type ::= "string";
 
-SBloquesPrincipales. BloquesPrincipales ::= BloqueConst BloqueTipos BloqueVariables "begin" [Stm] "end";
+SBloquesPrincipales. BloquesPrincipales ::= BloqueConst BloqueTipos BloqueVariables BloqueFunciones "begin" [Stm] "end";
 
 
 STiposVacio. BloqueTipos ::=;
@@ -97,7 +97,8 @@ TRangoArray. 	RangoArray	::= "array" "[" RangoIdent "]" "of" Type;
 SStmVacio. 		Stm  ::=;
 SSentenciaVacia.Stm ::= Ident;
 SSentencia. 	Stm ::= Ident "(" [ Exp ] ")";
-SAsignacion.	Stm ::= Variable ":=" Exp;
+SAsignacion1.	Stm ::= Variable ":=" Exp;
+
 SDesignacionCampoAExpresion.  Stm ::= Variable "." Ident ":=" [Exp];
 --============ ESTRUCTURAS DE CONTROL Y REPETICION  ================> 
 SRepeat. 		Stm ::= "repeat" [Stm] "until" Exp; 
@@ -120,7 +121,8 @@ SVariablesParametroPorReferencia. 	VariablesParametro ::= "var" DeclaracionVaria
 SVariablesParametroPorValor. 		VariablesParametro ::= DeclaracionVariables;
 separator VariablesParametro ";";
 
---SFunction. Stm ::= "function" Ident "(" [VariablesParametro] ")" ":" Type ";" BloquesPrincipales; 
+SFunctionVacia. BloqueFunciones ::=;
+SFunction. BloqueFunciones ::= "function" Ident "(" [VariablesParametro] ")" ":" Type ";" BloqueConst BloqueTipos BloqueVariables BloqueFunciones "begin" [Stm] "end" ";"; 
 
 
 
