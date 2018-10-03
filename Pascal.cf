@@ -84,7 +84,7 @@ EString. Exp4 ::= String;
 ETrue. Exp4 ::= "true";
 EFalse. Exp4 ::= "false";
 EIdent. Exp4 ::= Ident;
-ENegacion. Exp4 ::= "not" Exp4; -- no esta funcionando !!!!
+ENegacion. Exp4 ::= "not" Exp4;
 
 --============ TIPOS ENUMERADOS  ================> 
 TEnumerados. 	Enumerados ::= "(" [Ident] ")";
@@ -94,10 +94,15 @@ TRangoIdent. 	RangoIdent ::=  Ident ".." Ident;
 TRangoArray. 	RangoArray	::= "array" "[" RangoIdent "]" "of" Type; 
 
 
-SStmVacio. 		Stm  ::=;
+SStmVacio. 		Stm ::=;
 SSentenciaVacia.Stm ::= Ident;
 SSentencia. 	Stm ::= Ident "(" [ Exp ] ")";
-SAsignacion1.	Stm ::= Variable ":=" Exp;
+SAsignacion.	Stm ::= Variable ":=" Exp;
+SAsignacionF1.	Stm ::= Variable ":=" Ident "(" [VariablesParametro] ")";
+SAsignacionF2.	Stm ::= Variable ":=" Ident "(" [Ident] ")"; --esto funciona, pero evaluar si tiene sentido q sea asi...
+
+
+SPuntero.		Stm ::= "^" Ident;
 
 SDesignacionCampoAExpresion.  Stm ::= Variable "." Ident ":=" [Exp];
 --============ ESTRUCTURAS DE CONTROL Y REPETICION  ================> 
@@ -110,15 +115,16 @@ SCase. 			Stm ::= "case" "(" Ident ")" "of" [Ramas] "end";
 SProcedure. 	Stm ::= "procedure" Ident "(" [VariablesParametro] ")";
 
 --SDiscriminante. Discriminante ::= Ident;
-SRamas. 	Ramas ::= [Lit] ":" "begin" [Stm] "end";  -- reduce / reduce 
-SRamasStm. 	Ramas ::= [Lit] ":" Stm;  -- reduce / reduce 
+SRamas. 	Ramas ::= [Lit] ":" "begin" [Stm] "end";
+SRamasStm. 	Ramas ::= [Lit] ":" Stm;  
 
 separator nonempty Ramas ";";
 separator Lit ",";
 
 --============ FUNCIONES Y PRODCEDIMIENTOS  ================> 
 SVariablesParametroPorReferencia. 	VariablesParametro ::= "var" DeclaracionVariables;
-SVariablesParametroPorValor. 		VariablesParametro ::= DeclaracionVariables;
+SVariablesParametroPorValor. 		VariablesParametro ::= DeclaracionVariables; 
+ 
 separator VariablesParametro ";";
 
 SFunctionVacia. BloqueFunciones ::=;
